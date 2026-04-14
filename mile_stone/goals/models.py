@@ -12,6 +12,7 @@ class Goal(models.Model):
     CAREER = 'career'
     LIFE = 'life'
 
+
     # denotes if a goal is to be completed that day, week, month, or over a longer period
     GOAL_PERIOD = [
         (DAY, 'Day'),
@@ -33,8 +34,19 @@ class Goal(models.Model):
     goal_type = models.CharField(max_length=10, choices=GOAL_TYPE)
     goal_period = models.CharField(max_length=10, choices=GOAL_PERIOD)
     target_value = models.IntegerField(default=1)  # e.g. 20 miles in a week
+    current_value = models.IntegerField(default=0)
     complete_by_date = models.DateField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    parent_goal = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='sub_goals'
+    )
+
+    is_completed = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.title
