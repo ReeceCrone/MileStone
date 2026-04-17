@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render,  redirect
 from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from .models import Goal
 
 @login_required
@@ -18,3 +19,14 @@ def dayGoals(request):
     }
 
     return render(request, 'daygoals.html', context)
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+    else:
+        form = UserCreationForm()
+
+    return render(request, "register.html", {"form": form})
