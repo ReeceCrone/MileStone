@@ -4,12 +4,18 @@
   Todays Goals
 {% endblock %}
 
-
 {% block content %}
 
   <ul>
     {% for x in dailygoals %}
-      <li>{{ x.title }}</li>
+      <li>
+        {{ x.title }} |
+        {{ x.get_goal_type_display }} |
+        Progress: {{ x.current_value }}/{{ x.target_value }}
+      </li>
+    {% empty %}
+      <li>No daily goals yet</li>
     {% endfor %}
   </ul>
+
 {% endblock %}
