@@ -16,7 +16,7 @@
 
       <div class="progress-bar">
         {% for i in ""|ljust:x.target_value %}
-
+            
             <span
             class="box"
             data-goal="{{ x.id }}"
@@ -30,7 +30,7 @@
                 border-radius: 8px;
                 cursor:pointer;
                 {% if forloop.counter <= x.current_value %}
-                background:#4CAF50;
+                background:#1AF501;
                 {% endif %}
             ">
             </span>
@@ -83,7 +83,7 @@ document.querySelectorAll(".box").forEach(box => {
 function updateUI(goalId, value) {
     document.querySelectorAll(`[data-goal='${goalId}']`).forEach(box => {
         if (box.dataset.value <= value) {
-            box.style.background = "#4CAF50";
+            box.style.background = "#1AF501";
         } else {
             box.style.background = "transparent";
         }

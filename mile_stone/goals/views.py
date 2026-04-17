@@ -41,12 +41,23 @@ def update_progress_ajax(request):
     data = json.loads(request.body)
 
     goal_id = data.get("goal_id")
-    value = data.get("value")
+    clicked_value = int(data.get("value"))
 
     goal = Goal.objects.get(id=goal_id, user=request.user)
 
-    goal.current_value = value
-    goal.is_completed = int(goal.current_value) >= int(goal.target_value)
+    current = goal.current_value
+
+    # toggle logic
+    if current >= clicked_value:
+        goal.current_value = clicked_value - 1
+    else:
+        goal.current_value = clicked_value
+
+    # clamp at 0 (prevents negatives)
+    if goal.current_value < 0:
+        goal.current_value = 0
+
+    goal.is_completed = goal.current_value >= goal.target_value
     goal.save()
 
     return JsonResponse({
