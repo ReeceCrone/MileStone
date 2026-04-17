@@ -1,0 +1,15 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Todays Goals
+{% endblock %}
+
+
+{% block content %}
+
+  <ul>
+    {% for x in dailygoals %}
+      <li>{{ x.title }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
