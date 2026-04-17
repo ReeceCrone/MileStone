@@ -12,10 +12,19 @@
         {{ x.title }} |
         {{ x.get_goal_type_display }} |
         Progress: {{ x.current_value }}/{{ x.target_value }}
+        
       </li>
     {% empty %}
       <li>No daily goals yet</li>
     {% endfor %}
   </ul>
+
+  <h2>Add New Goal</h2>
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Add Goal</button>
+</form>
 
 {% endblock %}
