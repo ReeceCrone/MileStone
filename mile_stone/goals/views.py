@@ -6,6 +6,9 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Goal
 from django.contrib.auth import login
 from .forms import GoalForm
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+import json
 
 @login_required
 def main(request):
@@ -30,6 +33,26 @@ def dayGoals(request):
     return render(request, "daygoals.html", {
         "dailygoals": goals,
         "form": form,
+    })
+
+@login_required
+@require_POST
+def update_progress_ajax(request):
+    data = json.loads(request.body)
+
+    goal_id = data.get("goal_id")
+    value = data.get("value")
+
+    goal = Goal.objects.get(id=goal_id, user=request.user)
+
+    goal.current_value = value
+    goal.is_completed = int(goal.current_value) >= int(goal.target_value)
+    goal.save()
+
+    return JsonResponse({
+        "success": True,
+        "current_value": goal.current_value,
+        "is_completed": goal.is_completed,
     })
 
 def register(request):

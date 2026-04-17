@@ -25,4 +25,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('register/', views.register, name='register'),
     path('', include('goals.urls')),
+    path('api/update-progress/', views.update_progress_ajax, name='update_progress_ajax'),
 ]

@@ -11,9 +11,32 @@
       <li>
         {{ x.title }} |
         {{ x.get_goal_type_display }} |
-        Progress: {{ x.current_value }}/{{ x.target_value }}
         
       </li>
+
+      <div class="progress-bar">
+        {% for i in ""|ljust:x.target_value %}
+
+            <span
+            class="box"
+            data-goal="{{ x.id }}"
+            data-value="{{ forloop.counter }}"
+            style="
+                display:inline-block;
+                width:30px;
+                height:30px;
+                margin:1px;
+                border:4px solid #333;
+                border-radius: 8px;
+                cursor:pointer;
+                {% if forloop.counter <= x.current_value %}
+                background:#4CAF50;
+                {% endif %}
+            ">
+            </span>
+
+        {% endfor %}
+      </div>
     {% empty %}
       <li>No daily goals yet</li>
     {% endfor %}
@@ -27,4 +50,61 @@
   <button type="submit">Add Goal</button>
 </form>
 
+
+
+<script>
+document.querySelectorAll(".box").forEach(box => {
+    box.addEventListener("click", async function () {
+
+        const goalId = this.dataset.goal;
+        const value = this.dataset.value;
+
+        const response = await fetch("/api/update-progress/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify({
+                goal_id: goalId,
+                value: value
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            updateUI(goalId, data.current_value);
+        }
+    });
+});
+
+// update visual boxes without reload
+function updateUI(goalId, value) {
+    document.querySelectorAll(`[data-goal='${goalId}']`).forEach(box => {
+        if (box.dataset.value <= value) {
+            box.style.background = "#4CAF50";
+        } else {
+            box.style.background = "transparent";
+        }
+    });
+}
+
+// CSRF helper (Django requirement)
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
 {% endblock %}
+
