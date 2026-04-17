@@ -1,13 +1,18 @@
 .box {
-    display:inline-block;
-    width:30px;
-    height:30px;
-    margin:1px;
-    border:2px solid pink;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+    border: 3px solid #333;
     border-radius: 6px;
-    cursor:pointer;
-    background: transparent;
+    cursor: pointer;
     transition: all 0.15s ease;
+}
+
+/* filled state */
+.box.filled {
+    background: #1AF501;
+    box-shadow: 0 0 6px rgba(26, 245, 1, 0.4);
 }
 
 body {
@@ -16,11 +21,7 @@ body {
     font-weight: bolder;
 }
 
-.box.filled {
-    background: rgba(26, 245, 1, 0.25);
-    box-shadow: 0 0 6px rgba(26, 245, 1, 0.6);
-    animation: fillIn 0.15s ease-out;
-}
+
 
 @keyframes fillIn {
     0% {

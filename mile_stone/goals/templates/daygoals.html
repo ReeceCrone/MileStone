@@ -16,22 +16,10 @@
       <div class="progress-bar">
         {% for i in ""|ljust:x.target_value %}
             
-            <span
-            class="box"
-            data-goal="{{ x.id }}"
-            data-value="{{ forloop.counter }}"
-            style="
-                display:inline-block;
-                width:30px;
-                height:30px;
-                margin:1px;
-                border:4px solid #333;
-                border-radius: 8px;
-                cursor:pointer;
-                {% if forloop.counter <= x.current_value %}
-                background:#1AF501;
-                {% endif %}
-            ">
+            <span class="box
+                {% if forloop.counter <= x.current_value %}filled{% endif %}"
+                data-goal="{{ x.id }}"
+                data-value="{{ forloop.counter }}">
             </span>
 
         {% endfor %}
@@ -52,43 +40,47 @@
 
 
 <script>
-document.querySelectorAll(".box").forEach(box => {
-    box.addEventListener("click", async function () {
+document.addEventListener("click", async (e) => {
+    if (!e.target.classList.contains("box")) return;
 
-        const goalId = this.dataset.goal;
-        const value = this.dataset.value;
+    const box = e.target;
 
-        const response = await fetch("/api/update-progress/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": getCookie("csrftoken")
-            },
-            body: JSON.stringify({
-                goal_id: goalId,
-                value: value
-            })
-        });
+    const goalId = box.dataset.goal;
+    const value = box.dataset.value;
 
-        const data = await response.json();
-
-        if (data.success) {
-            updateUI(goalId, data.current_value);
-        }
+    const response = await fetch("/api/update-progress/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({
+            goal_id: goalId,
+            value: value
+        })
     });
+
+    const data = await response.json();
+
+    if (data.success) {
+        updateUI(goalId, data.current_value);
+    }
 });
 
 // update visual boxes without reload
 function updateUI(goalId, value) {
+    const current = Number(value);
+
     document.querySelectorAll(`[data-goal='${goalId}']`).forEach(box => {
-        if (box.dataset.value <= value) {
-            box.style.background = "#1AF501";
+        const boxValue = Number(box.dataset.value);
+
+        if (boxValue <= current) {
+            box.classList.add("filled");
         } else {
-            box.style.background = "transparent";
+            box.classList.remove("filled");
         }
     });
 }
-
 // CSRF helper (Django requirement)
 function getCookie(name) {
     let cookieValue = null;
