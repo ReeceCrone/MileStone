@@ -38,13 +38,6 @@ class Goal(models.Model):
     complete_by_date = models.DateField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    parent_goal = models.ForeignKey(
-        'self',
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
-        related_name='sub_goals'
-    )
 
     is_completed = models.BooleanField(default=False)
     
