@@ -9,8 +9,10 @@
 </head>
 <body>
     <div class="navbar">
-    <a href="\">Overview</a>
-    <a href='\daygoals'>Today</a>
+        <ul>
+            <li><a href="\">Overview</a></li>
+            <li><a href='\daygoals'>Today</a></li>
+        </ul>
     </div>
     {% if user.is_authenticated %}
     <p>Welcome {{ user.username }}</p>
