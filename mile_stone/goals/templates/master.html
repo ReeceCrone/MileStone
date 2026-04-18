@@ -3,7 +3,7 @@
 <html>
 <head>
   <title>{% block title %}{% endblock %}</title>
-  <link href="https://fonts.cdnfonts.com/css/dry-whiteboard-marker" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/chalktastic" rel="stylesheet">
                 
   <link rel="stylesheet" href="{% static 'styles.css' %}">
 </head>
@@ -24,9 +24,10 @@
     {% else %}
         <a href="/login/">Login</a>
     {% endif %}
-
-    {% block content %}
-    {% endblock %}
+    <div class="page">
+        {% block content %}
+        {% endblock %}
+    </div>
 
 </body>
 </html>
