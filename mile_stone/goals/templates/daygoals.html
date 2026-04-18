@@ -20,7 +20,13 @@
                 {% if forloop.counter <= x.current_value %}filled{% endif %}"
                 data-goal="{{ x.id }}"
                 data-value="{{ forloop.counter }}">
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <polyline points="5,10 95,15 5,25 95,30" />
+                    <polyline points="5,40 95,45 5,55 95,65" />
+                    <polyline points="5,70 95,80 5,95 95,100" />
+                </svg>
             </span>
+          
 
         {% endfor %}
       </div>
@@ -41,9 +47,8 @@
 
 <script>
 document.addEventListener("click", async (e) => {
-    if (!e.target.classList.contains("box")) return;
-
-    const box = e.target;
+    const box = e.target.closest(".box");
+    if (!box) return;
 
     const goalId = box.dataset.goal;
     const value = box.dataset.value;
@@ -75,9 +80,13 @@ function updateUI(goalId, value) {
         const boxValue = Number(box.dataset.value);
 
         if (boxValue <= current) {
-            box.classList.add("filled");
+            if (!box.classList.contains("filled")) {
+                box.classList.add("filled");
+                box.classList.add("animate"); // trigger animation
+            }
         } else {
             box.classList.remove("filled");
+            box.classList.remove("animate");
         }
     });
 }

@@ -48,7 +48,7 @@ def update_progress_ajax(request):
     current = goal.current_value
 
     # toggle logic
-    if current >= clicked_value:
+    if current == clicked_value:
         goal.current_value = clicked_value - 1
     else:
         goal.current_value = clicked_value
