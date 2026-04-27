@@ -13,7 +13,7 @@ body {
     color: whitesmoke;
 
     /* base chalkboard color */
-    background: rgb(2, 31, 2);
+    background: rgb(5, 5, 5);
 
     position: relative;
     min-height: 100vh;
@@ -113,23 +113,6 @@ body::after {
    BOX (CHALK TILE)
 ========================= */
 
-.box .edge {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-
-    pointer-events: none;
-}
-
-.box .edge path {
-    fill: none;
-    stroke: rgba(255,255,255,0.25);
-    stroke-width: 8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
 .box {
     width: 80px;
     height: 80px;
@@ -138,13 +121,10 @@ body::after {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-
-    border-radius: 16px;
-
-    background: transparent;
-
-    
-
+    background-image: url('images/chalkboxmk2.png');
+    background-size: 105%;   /* bigger than the box */
+    background-position: center;
+    background-repeat: no-repeat;
 
     transition: transform 0.15s ease, background-color .2s cubic-bezier(0.215, 0.610, 0.355, 1);
 }
@@ -154,61 +134,17 @@ body::after {
     transform: scale(1.05);
 }
 
-/* filled state */
-.box.filled {
-    background: rgba(255,255,255,0.85);
-
-    box-shadow: 0 0 2px white;
-    transition: background-color 3s linear;
-
-}
-
-/* =========================
-   CHALK TEXTURE OVERLAY
-========================= */
 
 
-
-/* =========================
-   CHALK BORDER GRIT
-========================= */
-
-.box::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    border-radius: 16px;
-
-    padding: 4px;
-
-    background:
-        radial-gradient(circle at 10% 10%, rgba(255,255,255,0.25), transparent 40%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.12), transparent 45%),
-        radial-gradient(circle at 30% 80%, rgba(255,255,255,0.18), transparent 50%),
-        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.10), transparent 55%);
-
-    /* cut out center so only edge shows */
-    -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
-        linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-
-    mask-composite: exclude;
-
-    opacity: 0.6;
-
-    pointer-events: none;
-}
 /* =========================
    SVG (CHALK STROKE)
 ========================= */
 
 .box svg {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    inset: 5px;
+    width: 85%;
+    height: 90%;
 
 
     pointer-events: none;
