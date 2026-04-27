@@ -1,10 +1,14 @@
 {% extends "master.html" %}
+{% load static %}
 
 {% block title %}
   Todays Goals
 {% endblock %}
 
 {% block content %}
+<div class="page-header">
+    <img src="{% static 'images/TodaysGoals.png' %}" alt="Daily Goals Header">
+</div>
   <ul>
     {% for x in dailygoals %}
       <li>

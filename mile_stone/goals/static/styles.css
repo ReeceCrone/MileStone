@@ -19,6 +19,8 @@ body {
     min-height: 100vh;
 }
 
+
+
 body::before {
     content: "";
     position: fixed;
@@ -69,6 +71,25 @@ body::after {
     margin: 10px 0;
 }
 
+ul {
+    list-style: none;
+}
+/* =========================
+   PAGE HEADER
+========================= */
+.page-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.page-header img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+
+    border-radius: 10px;
+}
 /* =========================
    NAVBAR
 ========================= */
