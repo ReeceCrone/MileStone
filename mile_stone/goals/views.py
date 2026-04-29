@@ -56,6 +56,26 @@ def weekGoals(request):
     })
 
 @login_required
+def monthGoals(request):
+    goals = Goal.objects.filter(user=request.user, goal_period="monthly")
+
+    if request.method == "POST":
+        form = GoalForm(request.POST)
+        if form.is_valid():
+            goal = form.save(commit=False)
+            goal.user = request.user
+            goal.goal_period = "monthly"
+            goal.save()
+            return redirect("monthgoals")
+    else:
+        form = GoalForm()
+
+    return render(request, "monthgoals.html", {
+        "monthlygoals": goals,
+        "form": form,
+    })
+
+@login_required
 @require_POST
 def update_progress_ajax(request):
     data = json.loads(request.body)
