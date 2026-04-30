@@ -11,12 +11,19 @@
 </div>
   <ul>
     {% for x in monthlygoals %}
-      <li>
-        {{ x.title }} |
-        {{ x.get_goal_type_display }} |
-        
-      </li>
+        <li>
+            <span class="parent-box {% if x.current_value >= x.target_value %}filled{% endif %}"
+                    data-goal="{{ x.id }}"
+                    data-complete="{% if x.current_value >= x.target_value %}1{% else %}0{% endif %}">
+                    
+                <svg viewBox="0 0 100 100">
+                    <polyline points="10,50 40,80 90,20" />
+                </svg>
+            </span>
 
+            {{ x.title }} |
+            {{ x.get_goal_type_display }} |
+        </li>
       <div class="progress-bar">
         {% for i in ""|ljust:x.target_value %}
             
@@ -49,66 +56,6 @@
 </form>
 
 
-
-<script>
-document.addEventListener("click", async (e) => {
-    const box = e.target.closest(".box");
-    if (!box) return;
-
-    const goalId = box.dataset.goal;
-    const value = box.dataset.value;
-
-    const response = await fetch("/api/update-progress/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": getCookie("csrftoken")
-        },
-        body: JSON.stringify({
-            goal_id: goalId,
-            value: value
-        })
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-        updateUI(goalId, data.current_value);
-    }
-});
-
-// update visual boxes without reload
-function updateUI(goalId, value) {
-    const current = Number(value);
-
-    document.querySelectorAll(`[data-goal='${goalId}']`).forEach(box => {
-        const boxValue = Number(box.dataset.value);
-
-        if (boxValue <= current) {
-            if (!box.classList.contains("filled")) {
-                box.classList.add("filled");
-                box.classList.add("animate"); // trigger animation
-            }
-        } else {
-            box.classList.remove("filled");
-            box.classList.remove("animate");
-        }
-    });
-}
-// CSRF helper (Django requirement)
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-</script>
+{% load static %}
+<script src="{% static 'js/goals.js' %}"></script>
 {% endblock %}
