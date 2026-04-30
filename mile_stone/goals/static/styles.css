@@ -3,6 +3,7 @@
    PAGE LAYOUT
 ========================= */
 
+
 body {
     margin: 0;
 
@@ -114,6 +115,34 @@ ul {
     gap: 4px;
 
     margin-bottom: 25px;
+}
+
+/* =========================
+   PARENT BOX 
+========================= */
+
+.parent-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+
+    border: 2px solid white;
+    border-radius: 6px;
+
+    margin-right: 10px;
+    cursor: pointer;
+
+    position: relative;
+}
+
+
+/* filled state */
+.parent-box.filled {
+    background-color: aqua;
 }
 
 /* =========================
