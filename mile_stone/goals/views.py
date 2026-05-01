@@ -8,7 +8,9 @@ from django.contrib.auth import login
 from .forms import GoalForm
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 import json
+
 
 @login_required
 def main(request):
@@ -54,6 +56,8 @@ def weekGoals(request):
         "weeklygoals": goals,
         "form": form,
     })
+
+    
 
 @login_required
 def monthGoals(request):
@@ -117,3 +121,16 @@ def register(request):
         form = UserCreationForm()
 
     return render(request, "register.html", {"form": form})
+
+@require_POST
+@login_required
+def delete_goal(request):
+    data = json.loads(request.body)
+    goal_id = data.get("goal_id")
+
+    try:
+        goal = Goal.objects.get(id=goal_id, user=request.user)
+        goal.delete()
+        return JsonResponse({"success": True})
+    except Goal.DoesNotExist:
+        return JsonResponse({"success": False})

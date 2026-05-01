@@ -11,18 +11,24 @@
 </div>
   <ul>
     {% for x in monthlygoals %}
-        <li>
+        <li data-goal-item="{{ x.id }}">
             <span class="parent-box {% if x.current_value >= x.target_value %}filled{% endif %}"
-                    data-goal="{{ x.id }}"
-                    data-complete="{% if x.current_value >= x.target_value %}1{% else %}0{% endif %}">
-                    
-                <svg viewBox="0 0 100 100">
-                    <polyline points="10,50 40,80 90,20" />
+                data-goal="{{ x.id }}"
+                data-complete="{% if x.current_value >= x.target_value %}1{% else %}0{% endif %}">
+                
+                <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <polyline points="25,10 85,15 20,25 84,30" />
+                    <polyline points="5,40 90,45 5,55 95,65" />
+                    <polyline points="15,75 75,80 30,95 85,80" />
                 </svg>
             </span>
 
             {{ x.title }} |
             {{ x.get_goal_type_display }} |
+
+            <button class="delete-goal" data-goal="{{ x.id }}">
+                ✕
+            </button>
         </li>
       <div class="progress-bar">
         {% for i in ""|ljust:x.target_value %}

@@ -1,4 +1,34 @@
 document.addEventListener("click", async (e) => {
+
+    const deleteBtn = e.target.closest(".delete-goal");
+    if (deleteBtn) {
+        const goalId = deleteBtn.dataset.goal;
+
+        const confirmed = confirm("Delete this goal?");
+        if (!confirmed) return;
+
+        const response = await fetch("/api/delete-goal/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: JSON.stringify({ goal_id: goalId })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            const goalItem = document.querySelector(`[data-goal-item='${goalId}']`);
+            const progressBar = goalItem?.nextElementSibling;
+
+            goalItem?.remove();
+            progressBar?.remove();
+        }
+
+        return; // stop here
+    }
+
     const box = e.target.closest(".box");
     if (box) {
         const goalId = box.dataset.goal;
@@ -25,14 +55,13 @@ document.addEventListener("click", async (e) => {
         return;
     }
 
-    //parent checkbox logic
+
     const parentBox = e.target.closest(".parent-box");
     if (!parentBox) return;
 
     const goalId = parentBox.dataset.goal;
     const isComplete = parentBox.dataset.complete === "1";
 
-    // find target
     const goalBoxes = document.querySelectorAll(`[data-goal='${goalId}']`);
     const target = goalBoxes.length;
 
@@ -41,17 +70,15 @@ document.addEventListener("click", async (e) => {
     if (isComplete) {
         parentBox.classList.remove("filled");
         parentBox.dataset.complete = "0";
-        newValue = 0; // clear all
+        newValue = 0;
     } else {
         parentBox.classList.add("filled");
         parentBox.dataset.complete = "1";
-        newValue = target; // fill all
+        newValue = target;
     }
 
-    
     updateUI(goalId, newValue);
 
-    //send to backend
     await fetch("/api/update-progress/", {
         method: "POST",
         headers: {
@@ -86,6 +113,7 @@ function updateUI(goalId, value) {
         }
     });
 
+
     // update parent boxes
     const parentBox = document.querySelector(`.parent-box[data-goal='${goalId}']`);
     if (parentBox) {
@@ -100,6 +128,8 @@ function updateUI(goalId, value) {
         }
     }
 }
+
+
 // CSRF helper (Django requirement)
 function getCookie(name) {
     let cookieValue = null;
